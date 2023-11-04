@@ -1,0 +1,29 @@
+# This file goes here: /etc/systemd/system/wallpaperrd.service
+#Test with:   systemctl start wallpaperrd.service 
+#Check with   systemctl status wallpaperrd.service
+#Enable with: systemctl enable wallpaperrd.service
+[Unit]
+Description=wallpaperrd
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+DynamicUser=true
+
+WorkingDirectory=/root
+RuntimeDirectory=/root
+
+
+ExecStart=/usr/local/bin/uvicorn \
+        --reload \
+        --host 0.0.0.0 \
+        --port 80 \
+        main:app
+ExecReload=/bin/kill -HUP ${MAINPID}
+RestartSec=1
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
