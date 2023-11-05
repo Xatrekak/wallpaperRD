@@ -2,6 +2,7 @@
 #Test with:   systemctl start wallpaperrd.service 
 #Check with   systemctl status wallpaperrd.service
 #Enable with: systemctl enable wallpaperrd.service
+#follow with: journalctl --follow -u wallpaperrd.service
 [Unit]
 Description=wallpaperrd
 After=network.target
