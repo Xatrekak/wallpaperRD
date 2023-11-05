@@ -41,7 +41,10 @@ def calc_nsfw():
     elif time_in_range(five_pm, ten_pm, current):
         nsfw_level = "010"
     else:
-        nsfw_level = "001"
+        if API_KEY:
+            nsfw_level = "001"
+        else:
+            nsfw_level = "010"
 
     return nsfw_level
 
