@@ -18,7 +18,6 @@ app = FastAPI()
 @app.get("/")
 async def main():
     # Redirect to /docs (relative URL)
-    get_rnd_wallpaper()
     return RedirectResponse(
         url=get_rnd_wallpaper(),
         status_code=status.HTTP_303_SEE_OTHER,
