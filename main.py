@@ -3,6 +3,10 @@ from fastapi.responses import RedirectResponse
 import starlette.status as status
 import requests
 import datetime
+import logging
+
+
+logger = logging.getLogger("uvicorn")
 
 # Set the NSFW level values 0 = disabled 1 = enabled.
 # AUTO overwrites the values and returns time based results
@@ -10,11 +14,11 @@ NSFW_FLAGS = {
     "SFW": "1",
     "PG_13": "1",
     "NSFW": "0",
-    "auto": False
+    "auto": True
     }
 
-# A wallhaven.cc API key is REQUIRED if and only if you want NSFW results
-API_KEY = ""
+# An API key is REQUIRED if and only if you want NSFW results
+API_KEY = "zkYi627POPhaREpTAcybmoacdPyWi2l7"
 
 
 def calc_nsfw():
@@ -41,10 +45,7 @@ def calc_nsfw():
     elif time_in_range(five_pm, ten_pm, current):
         nsfw_level = "010"
     else:
-        if API_KEY:
-            nsfw_level = "001"
-        else:
-            nsfw_level = "010"
+        nsfw_level = "001"
 
     return nsfw_level
 
@@ -58,15 +59,17 @@ def get_rnd_wallpaper():
     )
 
     wpurl = response.json()["data"][0]["path"]
-
+    logger.info(nsfw_level)
+    logger.info(wpurl)
     return wpurl
 
+
 app = FastAPI()
+
 
 @app.get("/")
 async def main():
     # Redirect to /docs (relative URL)
-    get_rnd_wallpaper()
     return RedirectResponse(
         url=get_rnd_wallpaper(),
         status_code=status.HTTP_303_SEE_OTHER,
