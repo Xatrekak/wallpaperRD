@@ -54,7 +54,7 @@ def get_rnd_wallpaper():
     api_key = "apikey=" + API_KEY + "&"
 
     response = requests.get(
-        f"https://wallhaven.cc/api/v1/search?{api_key}q=anime&categories=010&{nsfw_level}atleast=1920x1080&ratios=16x9%2C16x10&sorting=random&order=desc&ai_art_filter=1&page=1"
+        f"https://wallhaven.cc/api/v1/search?{api_key}categories=010&{nsfw_level}atleast=1920x1080&ratios=16x9%2C16x10&sorting=random&order=desc&ai_art_filter=1&page=1"
     )
 
     wpurl = response.json()["data"][0]["path"]
