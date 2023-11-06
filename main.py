@@ -14,11 +14,11 @@ NSFW_FLAGS = {
     "SFW": "1",
     "PG_13": "1",
     "NSFW": "0",
-    "auto": True
+    "auto": False
     }
 
 # An API key is REQUIRED if and only if you want NSFW results
-API_KEY = "zkYi627POPhaREpTAcybmoacdPyWi2l7"
+API_KEY = ""
 
 
 def calc_nsfw():
