@@ -30,14 +30,14 @@ def calc_nsfw():
         """Returns whether current is in the range [start, end]"""
         return start <= current <= end
 
-    nine_am = datetime.time(9, 0, 0)
+    seven_am = datetime.time(7, 0, 0)
     five_pm = datetime.time(17, 0, 0)
     ten_pm = datetime.time(22, 0, 0)
     day = datetime.datetime.today().weekday()
 
     current = datetime.datetime.now().time()
 
-    if time_in_range(nine_am, five_pm, current):
+    if time_in_range(seven_am, five_pm, current):
         if day < 5:
             nsfw_level = "100"
         else:
