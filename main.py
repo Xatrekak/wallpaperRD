@@ -46,8 +46,12 @@ def get_rnd_wallpaper(purity="100", apikey=""):
         logger.info(purity)
         logger.info(wpurl)
     except Exception as error:
-        wpurl = "https://w.wallhaven.cc/full/l3/wallhaven-l311ql.jpg"
-        logger.err(f"Fatal Error: Returned default WP\n{error}")
+        response = requests.get(
+            f'https://wallhaven.cc/api/v1/search?categories=010&purity=100&atleast=1920x1080&ratios=16x9%2C16x10&sorting=random&order=desc&ai_art_filter=1&page=1'
+        )
+    
+        wpurl = response.json()["data"][0]["path"]
+        logger.error(f"Fatal Error - Overwriting attributes:\n{error}")
 
     return wpurl
 
