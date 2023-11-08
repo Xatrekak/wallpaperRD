@@ -51,7 +51,8 @@ def get_rnd_wallpaper(purity="100", apikey=""):
         )
     
         wpurl = response.json()["data"][0]["path"]
-        logger.error(f"Fatal Error - Overwriting attributes:\n{error}")
+        logger.error(f"Fatal Error - Overwriting attributes: {error}")
+        logger.info(wpurl)
 
     return wpurl
 
