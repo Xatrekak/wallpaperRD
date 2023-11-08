@@ -4,6 +4,7 @@ import starlette.status as status
 import requests
 import datetime
 import logging
+import uvicorn
 
 
 logger = logging.getLogger("uvicorn")
@@ -74,3 +75,6 @@ async def main():
         url=get_rnd_wallpaper(),
         status_code=status.HTTP_303_SEE_OTHER,
     )
+
+if __name__ == "__main__":
+    uvicorn.run(app, host='0.0.0.0')
