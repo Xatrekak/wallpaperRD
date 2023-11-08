@@ -17,9 +17,6 @@ NSFW_FLAGS = {
     "auto": False
     }
 
-# An API key is REQUIRED if and only if you want NSFW results
-API_KEY = ""
-
 
 def calc_nsfw():
     if not NSFW_FLAGS["auto"]:
@@ -50,17 +47,16 @@ def calc_nsfw():
     return nsfw_level
 
 
-def get_rnd_wallpaper():
-    nsfw_level = "purity=" + calc_nsfw() + "&"
-    api_key = "apikey=" + API_KEY + "&"
+def get_rnd_wallpaper(purity = "100" , apikey = ""):
 
     response = requests.get(
-        f"https://wallhaven.cc/api/v1/search?{api_key}categories=010&{nsfw_level}atleast=1920x1080&ratios=16x9%2C16x10&sorting=random&order=desc&ai_art_filter=1&page=1"
+        f"https://wallhaven.cc/api/v1/search?{"apikey=" + apikey + "&"}categories=010&{"purity=" + purity + "&"}atleast=1920x1080&ratios=16x9%2C16x10&sorting=random&order=desc&ai_art_filter=1&page=1"
     )
 
     wpurl = response.json()["data"][0]["path"]
     logger.info(nsfw_level)
     logger.info(wpurl)
+    
     return wpurl
 
 
@@ -68,9 +64,33 @@ app = FastAPI()
 
 
 @app.get("/")
-async def main():
+async def default():
     # Redirect to /docs (relative URL)
     return RedirectResponse(
         url=get_rnd_wallpaper(),
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
+
+@app.get("/pg13")
+async def pg13():
+    # Redirect to /docs (relative URL)
+    return RedirectResponse(
+        url=get_rnd_wallpaper("010"),
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
+
+@app.get("/nsfw")
+async def all(apikey: str = ""):
+    # An API key is REQUIRED if and only if you want NSFW results
+    return RedirectResponse(
+        url=get_rnd_wallpaper("001", apikey),
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
+
+@app.get("/all")
+async def all(apikey: str = ""):
+    # An API key is REQUIRED if and only if you want NSFW results
+    return RedirectResponse(
+        url=get_rnd_wallpaper("111", apikey),
         status_code=status.HTTP_303_SEE_OTHER,
     )
