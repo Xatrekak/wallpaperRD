@@ -82,8 +82,14 @@ async def pg13():
 @app.get("/nsfw")
 async def all(apikey: str = ""):
     # An API key is REQUIRED if and only if you want NSFW results
-    return RedirectResponse(
-        url=get_rnd_wallpaper("001", apikey),
+    try:
+        return RedirectResponse(
+            url=get_rnd_wallpaper("001", apikey),
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
+    except IndexError:
+        return RedirectResponse(
+        url=get_rnd_wallpaper("010"),
         status_code=status.HTTP_303_SEE_OTHER,
     )
 
