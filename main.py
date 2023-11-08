@@ -4,7 +4,6 @@ import starlette.status as status
 import requests
 import datetime
 import logging
-import uvicorn
 
 
 logger = logging.getLogger("uvicorn")
