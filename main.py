@@ -54,7 +54,7 @@ def get_rnd_wallpaper(purity = "100" , apikey = ""):
     )
 
     wpurl = response.json()["data"][0]["path"]
-    logger.info(nsfw_level)
+    logger.info(purity)
     logger.info(wpurl)
     
     return wpurl
