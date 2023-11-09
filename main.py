@@ -24,7 +24,7 @@ def calc_nsfw(timezone):
     try:
         current = datetime.datetime.now(pytz.timezone(timezone)).time()
     except:
-        current = datetime.datetime.now("America/New_York").time()
+        current = datetime.datetime.now(pytz.timezone("America/New_York")).time()
 
     if time_in_range(seven_am, five_pm, current):
         if day < 5:
