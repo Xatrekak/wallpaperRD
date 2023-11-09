@@ -21,7 +21,10 @@ def calc_nsfw(timezone):
     ten_pm = datetime.time(22, 0, 0)
     day = datetime.datetime.today().weekday()
 
-    current = datetime.datetime.now(pytz.timezone(timezone)).time()
+    try:
+        current = datetime.datetime.now(pytz.timezone(timezone)).time()
+    except:
+        current = datetime.datetime.now("America/New_York").time()
 
     if time_in_range(seven_am, five_pm, current):
         if day < 5:
