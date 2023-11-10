@@ -39,10 +39,11 @@ https://ntbg.app/auto?apikey=YOUR_API_KEY&timezone=America/New_York
 
     (Optional) Replace America/New_York with your actual timezone. If not used New_York timezone is the fallback timezone. List of time zones.
 
-Why:
+# Why:
 
 I built this for myself! The infrastructure and bandwidth costs are near zero so I decided to share it with anyone interested.
-Security Concerns:
+
+# Security Concerns:
 
 If you use this service I Could potentially see you IP address and wallhaven.cc API key. I don't keep any of these logs and I think the consequences of this is fairly low. But if it is a concern do not use this service.
 
