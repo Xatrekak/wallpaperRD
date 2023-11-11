@@ -5,7 +5,6 @@ from datetime import datetime, time
 from random import choice
 from logging import getLogger
 from os import getenv
-import starlette.status as status
 import requests
 import pytz
 
@@ -116,7 +115,7 @@ async def default():
     """
     return RedirectResponse(
         url=get_rnd_wallpaper("sfw"),
-        status_code=status.HTTP_303_SEE_OTHER,
+        status_code=302,
     )
 
 
@@ -134,7 +133,7 @@ async def pg13():
     """
     return RedirectResponse(
         url=get_rnd_wallpaper("pg13"),
-        status_code=status.HTTP_303_SEE_OTHER,
+        status_code=302,
     )
 
 
@@ -162,7 +161,7 @@ async def nsfw():
     """
     return RedirectResponse(
         url=get_rnd_wallpaper("nsfw"),
-        status_code=status.HTTP_303_SEE_OTHER,
+        status_code=302,
     )
 
 
@@ -191,7 +190,7 @@ async def all():
     nsfw_lvl = choice(["sfw", "pg13", "nsfw"])
     return RedirectResponse(
         url=get_rnd_wallpaper(nsfw_lvl),
-        status_code=status.HTTP_303_SEE_OTHER,
+        status_code=302,
     )
 
 
@@ -219,7 +218,7 @@ async def auto(timezone: str = "America/New_York"):
     try:
         return RedirectResponse(
             url=get_rnd_wallpaper(calc_nsfw(timezone)),
-            status_code=status.HTTP_303_SEE_OTHER,
+            status_code=302,
         )
     except Exception as e:
         logger.info("")
@@ -227,7 +226,7 @@ async def auto(timezone: str = "America/New_York"):
         logger.warning("Fatal error - Invalid timezome - Overwriting user attribute.")
         return RedirectResponse(
             url=get_rnd_wallpaper(calc_nsfw("America/New_York")),
-            status_code=status.HTTP_303_SEE_OTHER,
+            status_code=302,
         )
 
 @app.exception_handler(404)
@@ -236,5 +235,5 @@ async def not_found_exception_handler(request: Request, exc: HTTPException):
     logger.error("Fatal error - Invalid path requested - Returning SFW picture.")
     return RedirectResponse(
         url=get_rnd_wallpaper("sfw"),
-        status_code=status.HTTP_303_SEE_OTHER,
+        status_code=302,
     )
