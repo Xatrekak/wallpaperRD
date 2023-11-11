@@ -1,7 +1,8 @@
 # ntbg.app – Dynamic Anime Wallpapers from wallhaven.cc
 
 I'm thrilled to introduce ntbg.app, a new free service that provides random anime wallpapers from wallhaven.cc, tailored to your preference for use with nightTab. Whether you're after something Safe for Work and kid friendly, a Sketchy piece that's is a little more interesting, or you're in the mood for something risqué, ntbg.app has got you covered!
-How to use:
+
+# How to use:
 
 Just add the URL to the background field in nightTab! That's it no registration needed.
 r/nighttab - Introducing ntbg.app – Dynamic Anime Wallpapers from wallhaven.cc for nightTab
