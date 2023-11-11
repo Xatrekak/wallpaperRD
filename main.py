@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
+from fastapi.exceptions import HTTPException
 from datetime import datetime, time
 from random import choice
 from logging import getLogger
@@ -85,9 +86,9 @@ def get_rnd_wallpaper(nsfw_lvl):
     if len(wp_list) == 0:
         fetch_wp_list(nsfw_lvl)
 
-    logger.info(nsfw_lvl)
+    logger.info("")
+    logger.info(f"Nsfw_lvl: {nsfw_lvl} - Remaining length of wp_list: {len(wp_list)}")
     logger.info(wpurl)
-    logger.info(len(wp_list))
 
     return wpurl
 
@@ -221,9 +222,19 @@ async def auto(timezone: str = "America/New_York"):
             status_code=status.HTTP_303_SEE_OTHER,
         )
     except Exception as e:
-        logger.error(e)
-        logger.error("Fatal error - Invalid timezome - Overwriting user attribute.")
+        logger.info("")
+        logger.warning(e)
+        logger.warning("Fatal error - Invalid timezome - Overwriting user attribute.")
         return RedirectResponse(
             url=get_rnd_wallpaper(calc_nsfw("America/New_York")),
             status_code=status.HTTP_303_SEE_OTHER,
         )
+
+@app.exception_handler(404)
+async def not_found_exception_handler(request: Request, exc: HTTPException):
+    logger.info("")
+    logger.error("Fatal error - Invalid path requested - Returning SFW picture.")
+    return RedirectResponse(
+        url=get_rnd_wallpaper("sfw"),
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
