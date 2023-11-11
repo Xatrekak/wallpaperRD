@@ -215,7 +215,15 @@ async def auto(timezone: str = "America/New_York"):
         IndexError: If the wallpaper retrieval fails and defaults to a safe wallpaper
                     with a specific code.
     """
-    return RedirectResponse(
-        url=get_rnd_wallpaper(calc_nsfw(timezone)),
-        status_code=status.HTTP_303_SEE_OTHER,
-    )
+    try:
+        return RedirectResponse(
+            url=get_rnd_wallpaper(calc_nsfw(timezone)),
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
+    except Exception as e:
+        logger.error(e)
+        logger.error("Fatal error - Invalid timezome - Overwriting user attribute.")
+        return RedirectResponse(
+            url=get_rnd_wallpaper(calc_nsfw("America/New_York")),
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
