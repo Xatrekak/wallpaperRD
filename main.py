@@ -2,13 +2,14 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from datetime import datetime, time
 from random import choice
+from logging import getLogger
 from os import getenv
 import starlette.status as status
 import requests
-import logging
 import pytz
 
-logger = logging.getLogger("uvicorn")
+logger = getLogger("uvicorn")
+
 
 API_KEY = getenv('API_KEY')
 
