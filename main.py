@@ -8,23 +8,27 @@ from os import getenv
 import requests
 import pytz
 
+# Tap into the uvicorn logger
 logger = getLogger("uvicorn")
 
-
+# Retrieve the API key from environment variables
 API_KEY = getenv('API_KEY')
 
+# Initialize lists to store wallpaper URLs for different categories
 SFW_WP_LIST = []
 PG13_WP_LIST = []
 NSFW_WP_LIST = []
 
 
-# Set the NSFW level values 0 = disabled 1 = enabled.
-# AUTO returns time based results
 def calc_nsfw(timezone):
-    def time_in_range(start, end, current):
-        """Returns whether current is in the range [start, end]"""
+    """
+    Calculate the appropriate NSFW level based on the current time and day in the given timezone.
+    """
+    def time_in_range(start, end, current) -> bool:
+        """Check if the current time is within the start and end time."""
         return start <= current <= end
 
+    # Define time thresholds
     seven_am = time(7, 0, 0)
     five_pm = time(17, 0, 0)
     nine_pm = time(22, 0, 0)
@@ -49,6 +53,9 @@ def calc_nsfw(timezone):
     return nsfw_level
 
 def fetch_wp_list(nsfw_lvl):
+    """
+    Fetch and populate the wallpaper list for the specified NSFW level.
+    """
     match nsfw_lvl:
         case "sfw":
             purity = "100"
@@ -70,7 +77,9 @@ def fetch_wp_list(nsfw_lvl):
 
 
 def get_rnd_wallpaper(nsfw_lvl):
-
+    """
+    Get a random wallpaper URL from the list corresponding to the NSFW level.
+    """
     match nsfw_lvl:
         case "sfw":
             wp_list = SFW_WP_LIST
@@ -92,6 +101,9 @@ def get_rnd_wallpaper(nsfw_lvl):
     return wpurl
 
 def populate_wp():
+    """
+    Populate wallpaper lists for all NSFW levels when the script starts.
+    """
     fetch_wp_list("sfw")
     fetch_wp_list("pg13")
     fetch_wp_list("nsfw")
@@ -105,13 +117,11 @@ app = FastAPI()
 @app.get("/")
 async def default():
     """
-    Default endpoint to retrieve a random SFW (Safe For Work) wallpaper from wallhaven.cc.
-    This endpoint is accessible without an API key and will only return wallpapers
-    that are suitable for all audiences. It redirects to the URL of the selected SFW wallpaper.
+    Default endpoint to retrieve a random SFW (Safe For Work) wallpaper. 
+    This endpoint automatically selects and redirects to a SFW wallpaper URL from wallhaven.cc.
 
     Returns:
-        RedirectResponse: A FastAPI response object that redirects the client to the
-                          URL of the random SFW wallpaper.
+        RedirectResponse: Redirects to a random SFW wallpaper URL with a 302 HTTP status code.
     """
     return RedirectResponse(
         url=get_rnd_wallpaper("sfw"),
@@ -122,14 +132,11 @@ async def default():
 @app.get("/pg13")
 async def pg13():
     """
-    Endpoint to retrieve a random Sketchy (PG-13) wallpaper from wallhaven.cc.
-    This endpoint does not require an API key and will only return wallpapers
-    that are flagged as slightly NSFW or PG-13, excluding SFW and fully NSFW content.
-    It redirects to the URL of the selected wallpaper.
+    Endpoint to retrieve a random PG-13 (slightly NSFW) wallpaper. 
+    Redirects to a PG-13 wallpaper URL from wallhaven.cc.
 
     Returns:
-        RedirectResponse: A FastAPI response object that redirects the client to the
-                          URL of the random PG-13 wallpaper.
+        RedirectResponse: Redirects to a random PG-13 wallpaper URL with a 302 HTTP status code.
     """
     return RedirectResponse(
         url=get_rnd_wallpaper("pg13"),
@@ -140,24 +147,11 @@ async def pg13():
 @app.get("/nsfw")
 async def nsfw():
     """
-    Endpoint to retrieve a random NSFW wallpaper from wallhaven.cc. Requires a
-    valid API key to access NSFW content. If the API key is not provided or is invalid,
-    the function will return a Sketchy (PG-13) wallpaper instead. It redirects to the
-    URL of the selected wallpaper.
-
-    Args:
-        apikey (str, optional): The API key for accessing NSFW content. Without this
-                                key, the endpoint will default to returning Sketchy content.
+    Endpoint to retrieve a random NSFW (Not Safe For Work) wallpaper. 
+    Redirects to an NSFW wallpaper URL from wallhaven.cc.
 
     Returns:
-        RedirectResponse: A FastAPI response object that redirects the client to the
-                          URL of the random NSFW wallpaper. If an IndexError occurs,
-                          it defaults to a Sketchy (PG-13) wallpaper.
-
-    Raises:
-        IndexError: If the NSFW wallpaper retrieval fails, indicating no wallpapers were
-                    found with the '001' NSFW flag, it then attempts to retrieve a
-                    wallpaper with the '010' Sketchy flag.
+        RedirectResponse: Redirects to a random NSFW wallpaper URL with a 302 HTTP status code.
     """
     return RedirectResponse(
         url=get_rnd_wallpaper("nsfw"),
@@ -168,24 +162,11 @@ async def nsfw():
 @app.get("/all")
 async def all():
     """
-    Endpoint to retrieve a random wallpaper from all categories on wallhaven.cc,
-    including SFW, Sketchy, and NSFW, depending on the provided API key. If the API
-    key is not provided, the function will only return SFW or Sketchy content. It
-    redirects to the URL of the selected wallpaper.
-
-    NSFW bits are as follows:
-    - '100': Fully SFW content only.
-    - '010': Slightly NSFW/PG-13 content.
-    - '001': Fully NSFW content.
-    These bits can be combined to access multiple categories.
-
-    Args:
-        apikey (str, optional): The API key for accessing NSFW content. If omitted,
-                                access is restricted to SFW and Sketchy content.
+    Endpoint to retrieve a random wallpaper from any category (SFW, PG-13, NSFW). 
+    The category is randomly selected and the user is redirected to the corresponding wallpaper URL from wallhaven.cc.
 
     Returns:
-        RedirectResponse: A FastAPI response object that redirects the client to the
-                          URL of the random wallpaper selected across all categories.
+        RedirectResponse: Redirects to a randomly selected wallpaper URL with a 302 HTTP status code.
     """
     nsfw_lvl = choice(["sfw", "pg13", "nsfw"])
     return RedirectResponse(
@@ -197,23 +178,20 @@ async def all():
 @app.get("/auto")
 async def auto(timezone: str = "America/New_York"):
     """
-    Endpoint to retrieve a random wallpaper from wallhaven.cc. If a valid API key
-    is provided and the current time falls within NSFW time range in the specified timezone,
-    NSFW results may be included. Redirects to the wallpaper URL.
+    Endpoint to retrieve a wallpaper based on the current time and the provided timezone. 
+    Adjusts the NSFW level of the wallpaper according to the time. In case of an invalid timezone, 
+    defaults to 'America/New_York'.
 
     Args:
-        apikey (str, optional): The API key for accessing NSFW content. If omitted,
-                                NSFW content will not be included in the results.
-        timezone (str, optional): The timezone string to determine the NSFW time range.
-                                  Defaults to "America/New_York".
+        timezone (str, optional): The timezone to determine the NSFW time range. 
+                                  Defaults to 'America/New_York'.
 
     Returns:
-        RedirectResponse: A FastAPI response object that redirects the client to the
-                          URL of the random wallpaper.
+        RedirectResponse: Redirects to a wallpaper URL as per calculated NSFW level 
+                          with a 302 HTTP status code.
 
     Raises:
-        IndexError: If the wallpaper retrieval fails and defaults to a safe wallpaper
-                    with a specific code.
+        Exception: Logs and handles exceptions related to invalid timezone input.
     """
     try:
         return RedirectResponse(
@@ -231,6 +209,17 @@ async def auto(timezone: str = "America/New_York"):
 
 @app.exception_handler(404)
 async def not_found_exception_handler(request: Request, exc: HTTPException):
+    """
+    Exception handler for 404 Not Found errors. Redirects to a random SFW wallpaper 
+    when an invalid path is requested.
+
+    Args:
+        request (Request): The request object.
+        exc (HTTPException): The exception object.
+
+    Returns:
+        RedirectResponse: Redirects to a random SFW wallpaper URL with a 302 HTTP status code.
+    """
     logger.info("")
     logger.error("Fatal error - Invalid path requested - Returning SFW picture.")
     return RedirectResponse(
