@@ -1,8 +1,6 @@
 uvicorn
 fastapi
 datetime
-random
-os
 requests
 logging
 pytz
