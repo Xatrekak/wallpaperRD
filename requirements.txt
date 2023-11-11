@@ -1,6 +1,4 @@
-uvicorn
 fastapi
-datetime
 requests
-logging
+uvicorn
 pytz
