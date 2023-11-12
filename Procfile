@@ -1,1 +1,1 @@
-web: gunicorn --worker-tmp-dir /dev/shm --config gunicorn_config.py main:app
+web: uvicorn main:app --host 0.0.0.0 --port 8080
