@@ -9,7 +9,7 @@ import requests
 import pytz
 
 # Tap into the uvicorn logger
-logger = getLogger("uvicorn")
+logger = getLogger("gunicorn")
 
 # Retrieve the API key from environment variables
 API_KEY = getenv('API_KEY')
