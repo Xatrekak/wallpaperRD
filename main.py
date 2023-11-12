@@ -7,7 +7,6 @@ from logging import getLogger
 from os import getenv
 import requests
 import pytz
-import uvicorn
 
 # Tap into the uvicorn logger
 logger = getLogger("uvicorn")
@@ -227,5 +226,3 @@ async def not_found_exception_handler(request: Request, exc: HTTPException):
         url=get_rnd_wallpaper("sfw"),
         status_code=302,
     )
-
-uvicorn.run(app, host="0.0.0.0", port=8080)
