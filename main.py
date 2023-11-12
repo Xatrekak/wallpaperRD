@@ -8,8 +8,8 @@ from os import getenv
 import requests
 import pytz
 
-# Tap into the uvicorn logger
-logger = getLogger("gunicorn")
+# Tap into the gunicorn logger
+logger = getLogger("gunicorn.error")
 
 # Retrieve the API key from environment variables
 API_KEY = getenv('API_KEY')
