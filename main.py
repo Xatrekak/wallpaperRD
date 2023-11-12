@@ -9,7 +9,7 @@ import requests
 import pytz
 
 # Tap into the uvicorn logger
-gunicorn_logger = getLogger('gunicorn.error')
+logger = getLogger("gunicorn")
 
 # Retrieve the API key from environment variables
 API_KEY = getenv('API_KEY')
@@ -112,7 +112,6 @@ def populate_wp():
 
 populate_wp()
 app = FastAPI()
-app.logger.handlers = logger.handlers
 
 
 @app.get("/")
