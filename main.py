@@ -112,6 +112,7 @@ def populate_wp():
 
 populate_wp()
 app = FastAPI()
+app.logger.handlers = logger.handlers
 
 
 @app.get("/")
