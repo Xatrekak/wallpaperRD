@@ -1,0 +1,15 @@
+name: Update DigitalOcean Env Vars
+on: push
+jobs:
+  update-env-vars:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install doctl
+        run: |
+          wget https://github.com/digitalocean/doctl/releases/download/v1.60.0/doctl-1.60.0-linux-amd64.tar.gz
+          tar xf doctl-1.60.0-linux-amd64.tar.gz
+          sudo mv doctl /usr/local/bin
+      - name: Set Environment Variables in DigitalOcean
+        run: |
+          doctl auth init -t ${{ secrets.DIGITALOCEAN_TOKEN }}
+          doctl apps update whale-app --spec .do/app.yaml --env-vars API_KEY=${{ secrets.API_KEY }}
