@@ -226,3 +226,14 @@ async def not_found_exception_handler(request: Request, exc: HTTPException):
         url=get_rnd_wallpaper("sfw"),
         status_code=302,
     )
+
+@app.get("/test")
+async def test():
+    wallpaper_url = get_rnd_wallpaper("sfw")
+    response = RedirectResponse(
+        url=wallpaper_url,
+        status_code=302,
+    )
+    # Add a custom header with the wallpaper URL
+    response.headers['X-Wallpaper-URL'] = wallpaper_url
+    return response
