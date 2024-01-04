@@ -232,7 +232,7 @@ async def test():
     wallpaper_url = get_rnd_wallpaper("sfw")
     response = RedirectResponse(
         url=wallpaper_url,
-        status_code=302,
+        status_code=303,
     )
     # Add a custom header with the wallpaper URL
     response.headers['X-Wallpaper-URL'] = wallpaper_url
