@@ -37,7 +37,7 @@ https://ntbg.app/all
 
     /auto: This endpoint serves you a wallpaper that automatically adjusts its NSFW level based on the time of day in your timezone. It's perfect for those who want a SFW wallpaper during work hours and something a bit more adventurous afterward. Use it like this:
 
-https://ntbg.app/auto&timezone=America/New_York
+https://ntbg.app/auto?timezone=America/New_York
 
     (Optional) Replace America/New_York with your actual timezone. If not used New_York timezone is the fallback timezone. List of time zones.
 
