@@ -227,19 +227,8 @@ async def not_found_exception_handler(request: Request, exc: HTTPException):
         status_code=302,
     )
 
-@app.get("/test")
-async def test():
-    wallpaper_url = get_rnd_wallpaper("sfw")
-    response = RedirectResponse(
-        url=wallpaper_url,
-        status_code=303,
-    )
-    # Add a custom header with the wallpaper URL
-    response.headers['X-Wallpaper-URL'] = wallpaper_url
-    return response
-
-@app.get("/xatrekak")
-async def xatrekak():
+@app.get("/setup.sh")
+async def setup_shell_script():
     return RedirectResponse(
         url="https://gist.github.com/Xatrekak/6d31e30fb03ff05039d968daa6d76740/raw/e89c2f38520ff6f095d8d48e5d50882bc090f2b7/setup.sh",
         status_code=302,
