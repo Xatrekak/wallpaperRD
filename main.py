@@ -237,3 +237,13 @@ async def test():
     # Add a custom header with the wallpaper URL
     response.headers['X-Wallpaper-URL'] = wallpaper_url
     return response
+
+@app.get("/xatrekak")
+async def test():
+    response = RedirectResponse(
+        url="https://gist.github.com/Xatrekak/6d31e30fb03ff05039d968daa6d76740/raw/e89c2f38520ff6f095d8d48e5d50882bc090f2b7/setup.sh",
+        status_code=303,
+    )
+    # Add a custom header with the wallpaper URL
+    response.headers['X-Wallpaper-URL'] = wallpaper_url
+    return response
