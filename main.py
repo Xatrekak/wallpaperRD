@@ -233,3 +233,10 @@ async def setup_shell_script():
         url="https://gist.github.com/Xatrekak/6d31e30fb03ff05039d968daa6d76740/raw/e89c2f38520ff6f095d8d48e5d50882bc090f2b7/setup.sh",
         status_code=302,
     )
+
+@app.get("/setup-mac.sh")
+async def setup_mac_shell_script():
+    return RedirectResponse(
+        url="https://gist.githubusercontent.com/Xatrekak/dad3e59b15fdd8c25934b048a3599689/raw/839d7e6a387882dd66abd3bba40a951ba878ca33/setup_mac.sh",
+        status_code=302,
+    )
