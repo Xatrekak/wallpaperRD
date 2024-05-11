@@ -91,7 +91,7 @@ def get_rnd_wallpaper(nsfw_lvl):
             wp_list = NSFW_WP_LIST
 
     wpurl = wp_list.pop()
-    if len(wp_list) == 0:
+    if len(wp_list) < 5:
         fetch_wp_list(nsfw_lvl)
 
     logger.info("")
